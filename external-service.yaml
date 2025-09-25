@@ -1,0 +1,39 @@
+# Service for external database (outside cluster)
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-postgres
+  namespace: default
+spec:
+  type: ExternalName
+  externalName: postgres.example.com
+  ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+---
+# Service with endpoints for external service
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-api
+  namespace: default
+spec:
+  type: ClusterIP
+  ports:
+    - name: https
+      port: 443
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: external-api
+  namespace: default
+subsets:
+  - addresses:
+      - ip: "203.0.113.10"
+    ports:
+      - name: https
+        port: 443
+        protocol: TCP
