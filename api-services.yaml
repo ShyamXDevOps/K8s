@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: default
+  labels:
+    app: api-gateway
+    tier: backend
+spec:
+  type: LoadBalancer
+  selector:
+    app: api-gateway
+    tier: backend
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+    - name: grpc
+      port: 9090
+      targetPort: 9090
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: default
+  labels:
+    app: user-service
+    tier: backend
+    component: microservice
+spec:
+  type: ClusterIP
+  selector:
+    app: user-service
+    tier: backend
+  ports:
+    - name: http
+      port: 8001
+      targetPort: 8001
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  namespace: default
+  labels:
+    app: order-service
+    tier: backend
+    component: microservice
+spec:
+  type: ClusterIP
+  selector:
+    app: order-service
+    tier: backend
+  ports:
+    - name: http
+      port: 8002
+      targetPort: 8002
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  namespace: default
+  labels:
+    app: notification-service
+    tier: backend
+    component: microservice
+spec:
+  type: ClusterIP
+  selector:
+    app: notification-service
+    tier: backend
+  ports:
+    - name: http
+      port: 8003
+      targetPort: 8003
+      protocol: TCP
